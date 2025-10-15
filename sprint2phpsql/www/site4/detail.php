@@ -40,9 +40,11 @@
                 echo $row['plataforma'];
                 echo "<p class='rojo'>Comentarios:</p>";
                 //Mostrar todos los comentarios relacionados con ese id de juego
+                echo "<ul>";
                 while ($com = mysqli_fetch_array($resultadotComentarios)) {
-                    echo "<p>" . $com['comentario'] . "</p>";
+                    echo "<li>" . $com['comentario'] . "</li>";
                 }
+                echo "</ul>";
             }
         }    
     ?>
