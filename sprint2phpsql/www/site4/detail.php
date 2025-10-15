@@ -22,7 +22,7 @@
         $consultatJuegos='SELECT * FROM tJuegos WHERE id='.$id;
         $resultadotJuegos=mysqli_query($db,$consultatJuegos) or die ('Error de consulta');
         $row=mysqli_fetch_array($resultadotJuegos);
-        $consultatComentarios = "SELECT comentario FROM tComentarios WHERE juego_id = $id";
+        $consultatComentarios = "SELECT comentario,fecha FROM tComentarios WHERE juego_id = $id";
         $resultadotComentarios = mysqli_query($db, $consultatComentarios) or die("Error al consultar comentarios");
 
         echo "<h2>";
@@ -39,7 +39,7 @@
         //Mostrar todos los comentarios relacionados con ese id de juego
         echo "<ul>";
         while ($com = mysqli_fetch_array($resultadotComentarios)) {
-            echo "<li>" . $com['comentario'] . "</li>";
+            echo "<li>" . $com['comentario'] . " - <small>(" . $com['fecha'] . ")</small></li>";
         }
         echo "</ul>";   
     ?>
@@ -61,5 +61,7 @@
             ">
         <input type="submit" value="Comentar">
     </form>
+    <br><br>
+    <a href="/main.php">Volver a la página principal</a>
 </body>
 </html>

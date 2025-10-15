@@ -13,7 +13,7 @@
     $diaSemana = date("l");
 
     // Mostramos el mensaje
-    echo "<h1>Hola, soy $nombre y hoy es $diaSemana </p>";
+    echo "<h1>Hola, soy " . $nombre . " y hoy es " . $diaSemana . "</p>";
     ?>
 </body>
 </html>

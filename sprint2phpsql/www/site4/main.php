@@ -27,7 +27,7 @@
             echo $row['descripcion'];
             echo "</em></p>";
             echo $row['plataforma'];
-            echo "<br>";
+            echo "<br><br>";
             echo "<a href='detail.php?id=" . $row['id'] . "'>Ver detalles</a>";
             echo "<hr>"; 
 
