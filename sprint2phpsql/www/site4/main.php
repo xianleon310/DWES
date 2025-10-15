@@ -12,28 +12,25 @@
 <body>
     <h1>Conexión establecida</h1>
     <?php
-        if ($_GET["id"]){
-            $id=$_GET["id"];
-        }else{
-            die ("<h3 class='rojo'>No se ha especificado ningún ID</h3>");
-        }
         //Lanzar consulta
         $consulta='SELECT * FROM tJuegos';
         $resultado=mysqli_query($db,$consulta) or die ('Error de consulta');
         //Bucle recorriendo todas las filas y plasmandolo
         while ($row=mysqli_fetch_array($resultado)){
-            if ($row['id']==$id){
-                echo "<h2>";
-                echo $row['nombre'];
-                echo "</h2>";
-                echo "<img width=100 height=100 src='";
-                echo $row[2];
-                echo "'></img>";
-                echo "<p><em>";
-                echo $row['descripcion'];
-                echo "</em></p>";
-                echo $row['plataforma'];
-            }
+            echo "<h2>";
+            echo $row['nombre'];
+            echo "</h2>";
+            echo "<img width=100 height=100 src='";
+            echo $row[2];
+            echo "'></img>";
+            echo "<p><em>";
+            echo $row['descripcion'];
+            echo "</em></p>";
+            echo $row['plataforma'];
+            echo "<br>";
+            echo "<a href='detail.php?id=" . $row['id'] . "'>Ver detalles</a>";
+            echo "<hr>"; 
+
         }    
     ?>
 </body>
