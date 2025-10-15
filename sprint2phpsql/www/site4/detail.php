@@ -44,8 +44,13 @@
         echo "</ul>";   
     ?>
     <p>Deja un nuevo comentario:</p>
+    <!--Se hace un formulario, el cual la lógica va a /comment.php-->
     <form action="/comment.php" method="post">
+        <!--para referenciarlo en la logica de post, se utilizará el new_comment, y el value 
+            será lo que se quedará la lógica (lo que el usuario ponga por teclado)-->
         <textarea rows="4" cols="50" name="new_comment"></textarea><br>
+        <!--para referenciarlo en la logica de post, se utilizará el juego_id, y el value será
+            lo que se quedará la lógica (el 'echo $id') que hace referencia al id donde estamos-->
         <input 
             type="hidden" 
             name="juego_id" 
