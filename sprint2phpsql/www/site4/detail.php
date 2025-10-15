@@ -17,11 +17,16 @@
         }else{
             die ("<h3 class='rojo'>No se ha especificado ningún ID</h3>");
         }
-        //Lanzar consulta
-        $consulta='SELECT * FROM tJuegos';
-        $resultado=mysqli_query($db,$consulta) or die ('Error de consulta');
+
+        //Lanzar consultas
+        $consultatJuegos='SELECT * FROM tJuegos';
+        $resultadotJuegos=mysqli_query($db,$consultatJuegos) or die ('Error de consulta');
+
+        $consultatComentarios = "SELECT comentario FROM tComentarios WHERE juego_id = $id";
+        $resultadotComentarios = mysqli_query($db, $consultatComentarios) or die("Error al consultar comentarios");
+
         //Bucle recorriendo todas las filas y plasmandolo
-        while ($row=mysqli_fetch_array($resultado)){
+        while ($row=mysqli_fetch_array($resultadotJuegos)){
             if ($row['id']==$id){
                 echo "<h2>";
                 echo $row['nombre'];
@@ -33,6 +38,11 @@
                 echo $row['descripcion'];
                 echo "</em></p>";
                 echo $row['plataforma'];
+                echo "<p class='rojo'>Comentarios:</p>";
+                //Mostrar todos los comentarios relacionados con ese id de juego
+                while ($com = mysqli_fetch_array($resultadotComentarios)) {
+                    echo "<p>" . $com['comentario'] . "</p>";
+                }
             }
         }    
     ?>
