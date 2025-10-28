@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="main-estilos.css">
 </head>
 <body>
-    <h1>Conexión establecida</h1>
     <?php
         if ($_GET["id"]){
             $id=$_GET["id"];
@@ -19,11 +18,16 @@
         }
 
         //Lanzar consultas
-        $consultatJuegos='SELECT * FROM tJuegos WHERE id='.$id;
-        $resultadotJuegos=mysqli_query($db,$consultatJuegos) or die ('Error de consulta');
-        $row=mysqli_fetch_array($resultadotJuegos);
-        $consultatComentarios = "SELECT comentario,fecha FROM tComentarios WHERE juego_id = $id";
-        $resultadotComentarios = mysqli_query($db, $consultatComentarios) or die("Error al consultar comentarios");
+        $consultatJuegos = $db->prepare('SELECT * FROM tJuegos WHERE id = ?');
+        $consultatJuegos->bind_param("i", $id);
+        $consultatJuegos->execute();
+        $resultadotJuegos = $consultatJuegos->get_result() or die ('Error de consulta');
+        $row = $resultadotJuegos->fetch_array();
+
+        $consultatComentarios = $db->prepare("SELECT comentario, fecha FROM tComentarios WHERE juego_id = ?");
+        $consultatComentarios->bind_param("i", $id);
+        $consultatComentarios->execute();
+        $resultadotComentarios = $consultatComentarios->get_result() or die("Error al consultar comentarios");
 
         echo "<h2>";
         echo $row['nombre'];
@@ -45,7 +49,7 @@
     ?>
     <p>Deja un nuevo comentario:</p>
     <!--Se hace un formulario, el cual la lógica va a /comment.php-->
-    <form action="/comment.php" method="post">
+    <form action="comment.php" method="post">
         <!--para referenciarlo en la logica de post, se utilizará el new_comment, y el value 
             será lo que se quedará la lógica (lo que el usuario ponga por teclado)-->
         <textarea rows="4" cols="50" name="new_comment"></textarea><br>
@@ -61,7 +65,8 @@
             ">
         <input type="submit" value="Comentar">
     </form>
+    <a href="logout.php">Cerrar sesión</a>
     <br><br>
-    <a href="/main.php">Volver a la página principal</a>
+    <a href="main.php">Volver a la página principal</a>
 </body>
 </html>

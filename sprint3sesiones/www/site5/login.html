@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main-estilos.css">
+</head>
+<body>
+    <h1>Iniciar sesión</h1>
+    <!--ONSUMIT INDICA QUE ESPERA UN TRUE O FALSE PARA SABER SI ENVIAR O NO EL FORMULARIO-->
+    <form method="post" action="login.php" onsubmit="return validar()">
+        <p>
+            <label for="mail">Correo electrónico:</label>
+            <input type="text" id="mail" name="mail">
+        </p>
+        <p>
+            <label for="pass">Contraseña:</label>
+            <input type="password" id="pass" name="pass">
+        </p>
+        <input type="submit" value="Acceder">
+        <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
+    </form>
+    <script>
+        function validar() {
+            var email = document.getElementById('mail').value;
+            var pass = document.getElementById('pass').value;
+            
+            if (email == '' || pass == '') {
+                alert('Los campos no pueden estar vacíos');
+                return false;  // NO ENVIA EL FORMULARIO SI HAY CAMPOS VACIOS
+            }
+            return true;  // ENVIA EL FORMULARIO SI ESTÁ TODO OK
+        }
+    </script>
+</body>
+</html>
