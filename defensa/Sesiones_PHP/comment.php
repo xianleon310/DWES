@@ -11,7 +11,7 @@
   }
 /*Escribe la sentencia SQL para insertar un comentario en la BD*/
   $stmt = mysqli_prepare($db,
-    ""
+    "INSERT INTO tComentarios (comentario,cancion_id,usuario_id) VALUES (?,?,?)"
   );
   mysqli_stmt_bind_param($stmt, "sii", $comentario, $cancion_id, $user_id_a_insertar);
   mysqli_stmt_execute($stmt) or die('Error al insertar comentario');
