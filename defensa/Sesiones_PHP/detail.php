@@ -2,7 +2,9 @@
 /* Haz que se muestre el id del usuario logueado sin hacer ninguna consulta a la BD*/
 session_start();
 $db = mysqli_connect('localhost', 'root', '1234', 'web_canciones') or die('Fail');
-
+if (!empty($_SESSION['user_id'])) {
+  $idusuario=$_SESSION["user_id"];
+}
 if (!isset($_GET['cancion_id'])) { die('Falta cancion_id'); }
 $cancion_id = (int) $_GET['cancion_id'];
 
@@ -39,7 +41,7 @@ echo '  <style>
   </style>';
 echo '</head>';
 echo '<body>';
-
+echo '<h1> BIENVENIDO, usuario con id '.$idusuario.'</h1';
 echo '  <header>';
 echo '    <h1>' . $song['titulo'] . '</h1>';
 echo '    <nav>';
@@ -55,15 +57,15 @@ echo '  <img class="cover" src="' . $song['url_imagen'] . '" alt="cover"><br>';
 echo '  <h3>Comentarios</h3>';
 while ($row = mysqli_fetch_assoc($res2)) {
   echo '  <div class="comment">';
-  echo '    <p>' . $row[1] . '</p>';
+  echo '    <p>' . $row["comentario"] . '</p>';
   echo '    <p class="muted">';
-  if ($row[2]) {
-    echo $row[2] . ' ' . $row[3];
+  if ($row["fecha"]) {
+    echo $row["fecha"] . ' ' . $row["nombre"];
   } else {
     echo 'Anónimo';
   }
   
-  echo ' — ' . $row[4];
+  echo ' — ' . $row["apellidos"];
   echo '    </p>';
   echo '  </div>';
 }
