@@ -27,7 +27,7 @@
             $insertar_usuarios = $db->prepare("INSERT INTO tUsuarios (nombre, apellidos, email, contraseña) VALUES (?, ?, ?, ?)");
             $insertar_usuarios->bind_param("ssss", $nombre, $apellidos, $mail, $contraseña_cifrada);
             $insertar_usuarios->execute();
-            header('Location: main.php');
+            header('Location: login.html');
         }
     }else{
         echo "Faltan campos por cubrir";
