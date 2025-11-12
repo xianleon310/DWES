@@ -52,6 +52,7 @@ def generarbatalla():
         
         if resultado_ronda == 0:
             print("Empate!")
+            continue
         elif resultado_ronda == 1:
             print("Ganaste esta ronda!")
             victorias_usuario += 1
@@ -89,4 +90,4 @@ def generarbatalla():
             print("Respuesta no válida")
 
 while True:
-    continuar = generarbatalla
+    continuar = generarbatalla()
