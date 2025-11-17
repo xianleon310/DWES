@@ -1,5 +1,5 @@
 <?php
-    $db=mysqli_connect('localhost','root','1234','mysitedb') or die('Fail');
+    $db=mysqli_connect('172.16.0.2','root','1234','mysitedb') or die('Fail');
     if (!empty($_POST["nombre"]) && !empty($_POST["mail"]) && !empty($_POST["apel"]) && !empty($_POST["pass"]) && !empty($_POST["pass2"])){
         $nombre=$_POST["nombre"];
         $apellidos=$_POST["apel"];

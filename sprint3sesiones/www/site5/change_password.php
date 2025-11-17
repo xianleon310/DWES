@@ -1,5 +1,5 @@
 <?php
-    $db = mysqli_connect('localhost', 'root', '1234', 'mysitedb') or die('Fail');
+    $db = mysqli_connect('172.16.0.2', 'root', '1234', 'mysitedb') or die('Fail');
     //VERIFICAR INICIO DE SESIÓN (RECORDAR QUE SE GUARDA EN LOGIN EL ID DEL USUARIO)
     session_start();
     if (empty($_SESSION['user_id'])) {

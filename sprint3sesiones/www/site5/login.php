@@ -1,5 +1,5 @@
 <?php
-    $db=mysqli_connect('localhost','root','1234','mysitedb') or die('Fail');
+    $db=mysqli_connect('172.16.0.2','root','1234','mysitedb') or die('Fail');
     //NO SE COMPRUEBA QUE FALTAN CAMPOS, YA QUE HAY CODIGO DE JS EN EL HTML COMPROBANDOLO
     $mail=$_POST["mail"];
     $contra=$_POST["pass"];

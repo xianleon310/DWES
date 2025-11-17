@@ -1,7 +1,7 @@
 <?php
     #CODIGO PARA INSERTAR TUPLAS CADA VEZ QUE EL USUARIO LE DE A COMENTAR, TRAYENDO LO QUE EL USUARIO
     #ESCRIBE VÍA TECLADO Y EL ID DEL GET
-    $db = mysqli_connect('localhost', 'root', '1234', 'mysitedb') or die('Fail');
+    $db = mysqli_connect('172.16.0.2', 'root', '1234', 'mysitedb') or die('Fail');
     //SE INICIA LA SESIÓN DE PARTE DE LOGIN
     session_start();
     $user_id_a_insertar=NULL;
