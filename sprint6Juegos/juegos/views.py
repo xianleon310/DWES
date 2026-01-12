@@ -1,58 +1,80 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Juego
+from .models import Juego, Equipo, Torneo
+from .serializers import JuegoSerializer, EquipoSerializer, TorneoSerializer
 
 class JuegoListAPIView(APIView):
-    """GET: Listar todos los juegos"""
     def get(self, request):
         juegos = Juego.objects.all()
-        
-        data = []
-        for juego in juegos:
-            data.append({
-                'id': juego.id,
-                'nombre': juego.nombre,
-                'genero': juego.genero,
-                'desarrollador': juego.desarrollador
-            })
-        
-        return Response(data)
+        serializer = JuegoSerializer(juegos, many=True)
+        return Response(serializer.data)
 
 class JuegoDetailAPIView(APIView):
-    """GET: Obtener un juego por id"""
     def get(self, request, pk):
         try:
             juego = Juego.objects.get(pk=pk)
-            data = {
-                'id': juego.id,
-                'nombre': juego.nombre,
-                'genero': juego.genero,
-                'desarrollador': juego.desarrollador,
-                'imagen_portada': juego.imagen_portada
-            }
-            return Response(data)
+            serializer = JuegoSerializer(juego)
+            return Response(serializer.data)
         except Juego.DoesNotExist:
-            return Response({'error': 'Juego no encontrado'}, status=404)
+            return Response({'error': 'Juego no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
 class JuegoCreateAPIView(APIView):
-    """POST: Crear un nuevo juego"""
     def post(self, request):
-        data = request.data
+        serializer = JuegoSerializer(data=request.data)
         
-        # Validación manual básica
-        if not data.get('nombre') or not data.get('genero'):
-            return Response({'error': 'Nombre y género son obligatorios'}, status=400)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        juego = Juego.objects.create(
-            nombre=data.get('nombre'),
-            genero=data.get('genero'),
-            desarrollador=data.get('desarrollador', '')
-        )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EquipoListAPIView(APIView):
+    def get(self, request):
+        equipos = Equipo.objects.all()
+        serializer = EquipoSerializer(equipos, many=True)
+        return Response(serializer.data)
+
+class EquipoDetailAPIView(APIView):
+    def get(self, request, pk):
+        try:
+            equipo = Equipo.objects.get(pk=pk)
+            serializer = EquipoSerializer(equipo)
+            return Response(serializer.data)
+        except Equipo.DoesNotExist:
+            return Response({'error': 'Equipo no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+class EquipoCreateAPIView(APIView):
+    def post(self, request):
+        serializer = EquipoSerializer(data=request.data)
         
-        return Response({
-            'id': juego.id,
-            'nombre': juego.nombre,
-            'genero': juego.genero,
-            'desarrollador': juego.desarrollador
-        }, status=201)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TorneoListAPIView(APIView):
+    def get(self, request):
+        torneos = Torneo.objects.all()
+        serializer = TorneoSerializer(torneos, many=True)
+        return Response(serializer.data)
+
+class TorneoDetailAPIView(APIView):
+    def get(self, request, pk):
+        try:
+            torneo = Torneo.objects.get(pk=pk)
+            serializer = TorneoSerializer(torneo)
+            return Response(serializer.data)
+        except Torneo.DoesNotExist:
+            return Response({'error': 'Torneo no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+class TorneoCreateAPIView(APIView):
+    def post(self, request):
+        serializer = TorneoSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
