@@ -2,11 +2,14 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Juego, Equipo, Jugador, Torneo, Participacion
 
+#CADA CLASE SE ENCARGA DE PASAR A JSON CADA UNO DE LOS DATOS REFLEJADOS
 class JuegoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Juego
         fields = ['id', 'nombre', 'genero', 'desarrollador', 
         'imagen_portada', 'created_at', 'updated_at']
+        #Creación automática, no los coge del models.py y no son
+        #modificables a través de post/put...
         extra_kwargs = {
             'id': {'read_only': True},
             'created_at': {'read_only': True},
@@ -111,3 +114,20 @@ class TorneoSerializer(serializers.ModelSerializer):
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
         }
+
+#DES SERIALIZACION -> pasa de json a python
+class InscribirEquipoSerializer(serializers.Serializer):
+    equipo_id = serializers.IntegerField()
+
+class FinalizarTorneoSerializer(serializers.Serializer):
+    posiciones = serializers.ListField(
+        child=serializers.DictField()
+    )
+
+class CambiarEstadoTorneoSerializer(serializers.Serializer):
+    nuevo_estado = serializers.ChoiceField(
+        choices=Torneo.Estado.choices
+    )
+
+class AsignarCapitanSerializer(serializers.Serializer):
+    jugador_id = serializers.IntegerField()
