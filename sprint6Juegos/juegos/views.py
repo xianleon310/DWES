@@ -13,6 +13,7 @@ from .serializers import (
     CambiarEstadoTorneoSerializer, AsignarCapitanSerializer
 )
 from .filters import TorneoFilter, EquipoFilter, JugadorFilter
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 #MODELVIEWSET:
 #crea automáticamente la opcion de:
@@ -36,6 +37,11 @@ class JuegoViewSet(ModelViewSet):
     #ordenamiento por defecto si no se especifica
     ordering = ['nombre']
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
 
 class EquipoViewSet(ModelViewSet):
     queryset = Equipo.objects.all()
@@ -47,11 +53,16 @@ class EquipoViewSet(ModelViewSet):
     ordering_fields = ['nombre', 'created_at', 'activo']
     ordering = ['-created_at']
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
     #Se aplica un post específico -> /api/equipos/5/asignar_capitan
     #siendo detail=True se tiene que especificar la primary key, en caso contrario no
     #por ejemplo, si detail fuera 'detail=False' la peticion post sería
     #-> /api/equipos/asignar_capitan
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def asignar_capitan(self, request, pk=None):
         
         #guarda en la variable equipo el objeto obtenido en el que coinciden
@@ -110,7 +121,7 @@ class EquipoViewSet(ModelViewSet):
     
 
     #Se crea un GET /api/equipos/activos
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def activos(self, request):
         #guarda en el objeto "equipos_activos" todos los equipos que tienen el campo 
         # activo a true
@@ -119,7 +130,7 @@ class EquipoViewSet(ModelViewSet):
         serializer = self.get_serializer(equipos_activos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated])
     def estadisticas(self, request, pk=None):
         equipo = self.get_object()
         
@@ -148,7 +159,12 @@ class TorneoViewSet(ModelViewSet):
     ordering_fields = ['nombre', 'premio_total', 'created_at', 'max_equipos']
     ordering = ['-created_at']
 
-    @action(detail=True, methods=['post'])
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def inscribir_equipo(self, request, pk=None):
         torneo = self.get_object()
         
@@ -201,7 +217,7 @@ class TorneoViewSet(ModelViewSet):
             status=status.HTTP_201_CREATED
         )
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def cambiar_estado(self, request, pk=None):
         torneo = self.get_object()
         
@@ -230,7 +246,7 @@ class TorneoViewSet(ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def finalizar(self, request, pk=None):
         torneo = self.get_object()
         
@@ -276,7 +292,7 @@ class TorneoViewSet(ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def estadisticas(self, request):
         estadisticas = {
             "total_torneos": Torneo.objects.count(),
@@ -305,13 +321,19 @@ class JugadorViewSet(ModelViewSet):
     ordering_fields = ['nickname', 'rango_actual', 'created_at']
     ordering = ['-rango_actual', 'nickname']
 
-    @action(detail=False, methods=['get'])
+
+    def get_permissions(self):  
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def sin_equipo(self, request):
         jugadores_libres = Jugador.objects.filter(equipo_id__isnull=True)
         serializer = self.get_serializer(jugadores_libres, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def por_rango(self, request):
         rango = request.query_params.get('rango', 'CHA')
         
@@ -342,3 +364,8 @@ class ParticipacionViewSet(ModelViewSet):
     filterset_fields = ['equipo_id', 'torneo_id', 'posicion_final']
     ordering_fields = ['posicion_final', 'premio_ganado', 'fecha_inscripcion']
     ordering = ['posicion_final']
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
